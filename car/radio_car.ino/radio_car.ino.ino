@@ -24,8 +24,8 @@
 RF24 myRadio(22, 23);
 byte addresses[][6] = {"0"};
 struct car_turn_calc{
-  uint16_t right_speed;
-  uint16_t left_speed;
+  int16_t right_speed;
+  int16_t left_speed;
 };
 typedef struct car_turn_calc CarTurn;
 CarTurn carTurn;
@@ -141,25 +141,32 @@ void move_backward(int speed)
   digitalWrite(B2, HIGH);
   analogWrite(ENB, speed);
 }
+/**
+ * Takes in a value representing the position of the right joysitck.
+ * It's range is that of the INPUTRANGE
+ * Calculates a reduction in speed for one side of the car determined
+ * by subtracting the value from the right stick from the general acceleration
+ * value of the left stick.
+ */
 CarTurn calculateTurnSpeed(int value)
 {
   CarTurn tempCarTurn;
-  float speedReduction = calculateForwardSpeed(data.left_y) - calculateForwardSpeed(value);
+  float speedReduction;
   if(value > INPUTRANGE / 2)
   {
     //right turn
-    Serial.println("Right turn: ");
-    Serial.println(speedReduction);
-    tempCarTurn.right_speed = calculateForwardSpeed(speedReduction);
-    tempCarTurn.left_speed = calculateForwardSpeed(data.left_y);
+    speedReduction = calculateForwardSpeed(data.left_y) - calculateForwardSpeed(value);
+    if(speedReduction < 0) speedReduction = 0;
+    tempCarTurn.right_speed = calculateForwardSpeed(data.left_y);
+    tempCarTurn.left_speed = speedReduction;
   }
   else
   {
     //left turn
-    Serial.println("Left turn: ");
-    Serial.println(speedReduction);
-    tempCarTurn.right_speed = calculateForwardSpeed(data.left_y);
-    tempCarTurn.left_speed = calculateForwardSpeed(speedReduction);
+    speedReduction = calculateForwardSpeed(data.left_y) - (calculateForwardSpeed(value) * -1);
+    if(speedReduction < 0) speedReduction = 0;
+    tempCarTurn.right_speed = speedReduction;
+    tempCarTurn.left_speed = calculateForwardSpeed(data.left_y);
   }
   return tempCarTurn;
 }
