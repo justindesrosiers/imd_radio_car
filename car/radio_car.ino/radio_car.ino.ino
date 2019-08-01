@@ -46,7 +46,6 @@ typedef struct controller Package;
 Package data;
 
 void setup() {
-  Serial.begin(9600);
   // Set up the transeiver - channel, PALevel etc.
   pinMode(ENA, OUTPUT);
   pinMode(ENB, OUTPUT);
@@ -66,7 +65,6 @@ void setup() {
 void loop() {
   if (myRadio.available())
   {
-    Serial.println("radio available.");
     // If the transeiver is available, read it into the package.
     while (myRadio.available())
     {
@@ -83,10 +81,6 @@ void loop() {
       float convertedValueBack = calculateBackwardSpeed(data.left_y);
       move_backward(convertedValueBack); 
     }
-  }
-  else
-  {
-    Serial.println("Radio unavailable...");
   }
 }
 /**
