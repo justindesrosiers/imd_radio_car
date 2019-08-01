@@ -15,7 +15,6 @@ struct controller {
 typedef struct controller Controller;
 Controller controller;
 void setup() {
-  Serial.begin(9600);
   // Set digital pins to read JoyStick button press
   pinMode(0, INPUT);
   pinMode(1, INPUT);
