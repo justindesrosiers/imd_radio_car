@@ -9,7 +9,7 @@
  */
 #include <SPI.h>
 #include "RF24.h"
-#include "../../lib/car/Car.h"
+#include "Car.h"
 
 #define INPUTRANGE 1024
 #define OUTPUTRANGE 255

@@ -6,7 +6,7 @@
 #define Car_h
 
 #include "CarTurn.h"
-#include "../controller/ControllerPackage.h"
+#include "controller/ControllerPackage.h"
 
 class Car
 {
